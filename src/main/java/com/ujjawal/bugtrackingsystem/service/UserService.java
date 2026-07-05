@@ -1,8 +1,6 @@
 package com.ujjawal.bugtrackingsystem.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import com.ujjawal.bugtrackingsystem.entity.User;
 import com.ujjawal.bugtrackingsystem.repository.UserRepository;
 import java.util.List;
