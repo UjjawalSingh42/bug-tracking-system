@@ -2,6 +2,8 @@ package com.ujjawal.bugtrackingsystem.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ujjawal.bugtrackingsystem.entity.Bug;
+import com.ujjawal.bugtrackingsystem.dto.BugRequestDto;
+import com.ujjawal.bugtrackingsystem.dto.BugResponseDto;
+import jakarta.validation.Valid;
 import com.ujjawal.bugtrackingsystem.service.BugService;
 
 @RestController
@@ -24,30 +28,37 @@ public class BugController {
     }
 
     @PostMapping
-    public Bug createBug(@RequestBody Bug bug) {
-        return bugService.createBug(bug);
+    public ResponseEntity<BugResponseDto> createBug(@Valid @RequestBody BugRequestDto requestDto) {
+        BugResponseDto response = bugService.createBug(requestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
-    public List<Bug> getAllBugs() {
-        return bugService.getAllBugs();
+    public ResponseEntity<List<BugResponseDto>> getAllBugs() {
+        List<BugResponseDto> bug = bugService.getAllBugs();
+        return ResponseEntity.ok(bug);
     }
 
     @GetMapping("/{id}")
-    public Bug getBugById(@PathVariable Long id) {
-        return bugService.getBugById(id);
+    public ResponseEntity<BugResponseDto> getBugById(@PathVariable Long id) {
+
+        BugResponseDto bug = bugService.getBugById(id);
+
+        return ResponseEntity.ok(bug);
     }
 
     @PutMapping("/{id}")
-    public Bug updateBug(@PathVariable Long id,
-            @RequestBody Bug bug) {
+    public ResponseEntity<BugResponseDto> updateBug(@PathVariable Long id,
+            @Valid @RequestBody BugRequestDto requestDto) {
 
-        return bugService.updateBug(id, bug);
+        BugResponseDto updatedBug = bugService.updateBug(id, requestDto);
+        return ResponseEntity.ok(updatedBug);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBug(@PathVariable Long id){
+    public ResponseEntity<Void> deleteBug(@PathVariable Long id) {
         bugService.deleteBug(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
